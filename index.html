@@ -60,6 +60,23 @@
             background-color: #f44336;
             color: white;
         }
+
+        #video-container {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #play-button {
+            display: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 
@@ -69,6 +86,16 @@
     <div id="result-message"></div>
     <center><button id="next-button" onclick="nextQuestion()">下一題</button></center>
     <center><button id="restart-button" onclick="restartQuiz()">重來一次</button></center>
+    <div id="video-container">
+        <video id="custom-video" width="727" height="409" controls>
+            <source
+                src="https://cdn.discordapp.com/attachments/924564972216926331/1191781874561982464/Josh_Hutcherson_Whistle.mp4"
+                type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <center><button id="play-button" onclick="playVideo()">點擊進入</button></center>
+
 
 
     <script>
@@ -1316,6 +1343,65 @@
 
         // Start the quiz when the page loads
         window.onload = startQuiz;
+    </script>
+    <script>
+
+        // 檢查網址是否包含 "dyliu"
+        var isDyliuPage = window.location.href.includes("dyliu");
+
+        var currentDate = new Date();
+        var targetDate = new Date(currentDate.getFullYear(), 0, 5, 13, 0, 0); // 1/5 13:00 的日期對象
+
+        if (currentDate > targetDate || isDyliuPage) {
+            document.getElementById('play-button').style.display = 'block';
+        }
+
+        // 播放影片並設置音量為最大
+        function playVideo() {
+            var videoContainer = document.getElementById('video-container');
+            var playButton = document.getElementById('play-button');
+            var customVideo = document.getElementById('custom-video');
+
+            videoContainer.style.display = 'block';
+            customVideo.play();
+
+            playButton.style.display = 'none';
+
+            // 進入全螢幕模式
+            if (customVideo.requestFullscreen) {
+                customVideo.requestFullscreen();
+            } else if (customVideo.mozRequestFullScreen) { /* Firefox */
+                customVideo.mozRequestFullScreen();
+            } else if (customVideo.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                customVideo.webkitRequestFullscreen();
+            } else if (customVideo.msRequestFullscreen) { /* IE/Edge */
+                customVideo.msRequestFullscreen();
+            }
+        }
+    </script>
+    <script>
+        // 檢查網址是否包含 "dyliu"
+        var isDyliuPage = window.location.href.includes("dyliu");
+
+        var currentDate = new Date();
+        var targetDate = new Date(currentDate.getFullYear(), 0, 5, 13, 0, 0); // 1/5 13:00 的日期對象
+
+        if (currentDate > targetDate || isDyliuPage) {
+            // 超過 1/5 13:00，隱藏相應的元素
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('options-container').style.display = 'none';
+            document.getElementById('result-message').style.display = 'none';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('restart-button').style.display = 'none';
+        }
+
+        function nextQuestion() {
+            // 下一題的邏輯
+        }
+
+        function restartQuiz() {
+            // 重來一次的邏輯
+        }
     </script>
 </body>
 
