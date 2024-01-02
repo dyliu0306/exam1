@@ -137,6 +137,12 @@
             var resultMessage = document.getElementById('result-message');
             var nextButton = document.getElementById('next-button');
 
+            // 禁用所有按鈕
+            var allButtons = document.querySelectorAll('.option-button');
+            allButtons.forEach(function (button) {
+                button.disabled = true;
+            });
+
             var selectedIndex = parseInt(selectedButton.getAttribute('data-index'), 10);
 
             if (questions[currentQuestionIndex][1][selectedIndex] === questions[currentQuestionIndex][2]) {
