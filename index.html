@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資科題庫</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        #question-container {
+            margin-bottom: 20px;
+        }
+
+        #options-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .option-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #result-message {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        #next-button,
+        #restart-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #restart-button {
+            background-color: #f44336;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="question-container"></div>
+    <div id="options-container"></div>
+    <div id="result-message"></div>
+    <button id="next-button" onclick="nextQuestion()">下一題</button>
+    <button id="restart-button" onclick="restartQuiz()">重來一次</button>
+
+    <script>
+        var questions = JSON.parse(exam());
+        var currentQuestionIndex;
+        var correctAnswers = 0;
+
+        function startQuiz() {
+            currentQuestionIndex = getRandomQuestionIndex();
+            displayQuestion();
+        }
+
+        function getRandomQuestionIndex() {
+            return Math.floor(Math.random() * questions.length);
+        }
+
+        function displayQuestion() {
+            var questionContainer = document.getElementById('question-container');
+            var optionsContainer = document.getElementById('options-container');
+            var resultMessage = document.getElementById('result-message');
+            console.log(questions[currentQuestionIndex][2])
+
+            questionContainer.innerHTML = questions[currentQuestionIndex][0];
+
+            optionsContainer.innerHTML = '';
+            questions[currentQuestionIndex][1].forEach(function (option, index) {
+                var optionButton = document.createElement('button');
+                optionButton.className = 'option-button';
+                optionButton.innerText = option;
+                optionButton.onclick = function () { checkAnswer(index); };
+                optionsContainer.appendChild(optionButton);
+            });
+
+            resultMessage.innerText = '';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('restart-button').style.display = 'none';
+        }
+
+        function checkAnswer(selectedIndex) {
+            var resultMessage = document.getElementById('result-message');
+            var nextButton = document.getElementById('next-button');
+
+            if (questions[currentQuestionIndex][1][selectedIndex] === questions[currentQuestionIndex][2]) {
+                correctAnswers++;
+                resultMessage.innerText = '答對了!';
+            } else {
+                resultMessage.innerHTML = '<font color="#FF0000">答錯了</font>，正確答案是 ' + questions[currentQuestionIndex][2];
+                nextButton.style.backgroundColor = "#FF0000"; // 新增：紅色按鈕背景色
+            }
+
+            if (questions.length > 1) {
+                nextButton.style.display = 'block';
+            } else {
+                resultMessage.innerText += ' 全部答對!';
+                document.getElementById('restart-button').style.display = 'block';
+            }
+        }
+
+        function nextQuestion() {
+            questions.splice(currentQuestionIndex, 1);
+            if (questions.length > 0) {
+                currentQuestionIndex = getRandomQuestionIndex();
+                displayQuestion();
+            }
+        }
+
+        function restartQuiz() {
+            questions = JSON.parse(json2());
+            correctAnswers = 0;
+            startQuiz();
+        }
+
+        function exam() {
+            return `
+        [
+  [
+    "_______ is any data or instructions that are used by a computer.",
+    [
+      "Output",
+      "Digital",
+      "Information",
+      "Input"
+    ],
+    "Input"
+  ],
+  [
+    "The arrangement of keys on a keyboard, QWERTY reflects the keyboard layout by _______.",
+    [
+      "using the letters of the alphabetic characters that are closest to access while typing",
+      "representing the phonetics of the alphabets most closely associated with the keyboard",
+      "using the alphabetic characters most frequently used on the keyboard",
+      "taking the letters of the first six alphabetic characters found on the top row of keys"
+    ],
+    "taking the letters of the first six alphabetic characters found on the top row of keys"
+  ],
+  [
+    "Keyboards that are widely used on various smartphones and other small portable devices, and which are designed primarily for communicating via texting and connecting to the Web.",
+    [
+      "Thumb",
+      "Traditional",
+      "Notebook",
+      "Combination"
+    ],
+    "Thumb"
+  ],
+  [
+    "Type of keyboard that uses a touch screen as the input device.",
+    [
+      "Traditional",
+      "Virtual",
+      "Wireless",
+      "PDA"
+    ],
+    "Virtual"
+  ],
+  [
+    "A keyboard key, like Caps Lock, that turns a feature on or off is called a _______ key.",
+    [
+      "power",
+      "function",
+      "toggle",
+      "combination"
+    ],
+    "toggle"
+  ],
+  [
+    "This type of mouse emits and senses light to detect mouse movement.",
+    [
+      "Optical",
+      "Mechanical",
+      "Wireless",
+      "Cordless"
+    ],
+    "Optical"
+  ],
+  [
+    "The study of human factors related to things people use.",
+    [
+      "Ergonomics",
+      "Headgear",
+      "RSI",
+      "Technical study"
+    ],
+    "Ergonomics"
+  ],
+  [
+    "These screens can be touched with more than one finger, which allows for interactions such as rotating graphical objects on the screen with your hand or zooming in and out by pinching and stretching your fingers.",
+    [
+      "Touch",
+      "Multitouch",
+      "CRT",
+      "LCD"
+    ],
+    "Multitouch"
+  ],
+  [
+    "Which of the following is not a type of scanning device?",
+    [
+      "Stylus",
+      "Character and mark recognition",
+      "Bar code reader",
+      "Optical scanner"
+    ],
+    "Stylus"
+  ],
+  [
+    "Bar code readers use _______ embedded in them to read bar codes.",
+    [
+      "magnetic cells",
+      "RFID microchip",
+      "photoelectric cells",
+      "coprocessors"
+    ],
+    "photoelectric cells"
+  ],
+  [
+    "This reading device is used in banks to read the numbers on the bottom of checks and deposit slips.",
+    [
+      "UPC",
+      "MICR",
+      "OMR",
+      "OCR"
+    ],
+    "MICR"
+  ],
+  [
+    "Which of the following types of character recognition systems is used for standardized multiple-choice testing?",
+    [
+      "OMR",
+      "OCR",
+      "UPC",
+      "MICR"
+    ],
+    "OMR"
+  ],
+  [
+    "OMR, OCR, and MICR are all types of _______.",
+    [
+      "magnetic card readers",
+      "character and mark recognition devices",
+      "Radio Frequency Card Readers",
+      "bar code readers"
+    ],
+    "character and mark recognition devices"
+  ],
+  [
+    "_______-input devices convert sounds into a form that can be processed by the system unit.",
+    [
+      "Audio",
+      "Plotting",
+      "Electrolyzing",
+      "Webcam"
+    ],
+    "Audio"
+  ],
+  [
+    "The most widely used audio-input device is the _______.",
+    [
+      "microphone",
+      "stylus",
+      "Webcam",
+      "radio frequency card reader"
+    ],
+    "microphone"
+  ],
+  [
+    "The series of dots that form the image on a monitor are called _______",
+    [
+      "bits",
+      "pixels",
+      "bytes",
+      "picas"
+    ],
+    "pixels"
+  ],
+  [
+    "This indicates the monitor’s ability to display colors by comparing the light intensity of the brightest white to the darkest black.",
+    [
+      "Resolution",
+      "Contrast ratio",
+      "Active display area",
+      "Dot pitch"
+    ],
+    "Contrast ratio"
+  ],
+  [
+    "The distance between each pixel.",
+    [
+      "Word size",
+      "Resolution",
+      "Refresh rate",
+      "Dot pitch"
+    ],
+    "Dot pitch"
+  ],
+  [
+    "The size, or _______, is measured by the diagonal length of a monitor’s viewing area.",
+    [
+      "aspect ratio",
+      "resolution",
+      "dot pitch",
+      "active display area"
+    ],
+    "active display area"
+  ],
+  [
+    "The proportional relationship between a display’s width and height.",
+    [
+      "Clock speed",
+      "Aspect ratio",
+      "Dot pitch",
+      "Resolution"
+    ],
+    "Aspect ratio"
+  ],
+  [
+    "A dedicated, mobile device for storing and displaying e-books and other electronic media including electronic newspapers and magazines.",
+    [
+      "E-book reader",
+      "HDTV",
+      "Interactive whiteboard",
+      "Flat panel monitor"
+    ],
+    "E-book reader"
+  ],
+  [
+    "Specialized devices with a large display connected to a computer projector and are widely used in classrooms and corporate boardrooms.",
+    [
+      "E-books",
+      "HDTV",
+      "Scanners",
+      "Digital or interactive whiteboards"
+    ],
+    "Digital or interactive whiteboards"
+  ],
+  [
+    "What kind of specialized monitor is especially useful for graphic artists, designers, and publishers?",
+    [
+      "E-book",
+      "CRT monitor",
+      "Ultra-high-definition television (UHDTV)",
+      "Flat-panel monitor"
+    ],
+    "Ultra-high-definition television (UHDTV)"
+  ],
+  [
+    "Which of the following statements is incorrect?",
+    [
+      "Printer resolution is measured in dpi (dots per inch).",
+      "Memory within a printer is used to store printing instructions and documents waiting to be printed.",
+      "Printer output is often called hard copy.",
+      "Printer speed is measured in the number of words printed per minute."
+    ],
+    "Printer speed is measured in the number of words printed per minute."
+  ],
+  [
+    "Two categories of laser printers are _______.",
+    [
+      "thermal and personal",
+      "active-matrix and passive matrix",
+      "personal and shared",
+      "ink-jet and high-definition"
+    ],
+    "personal and shared"
+  ],
+  [
+    "Hard disks store and organize files using all the following, except _______.",
+    [
+      "cylinders",
+      "tracks",
+      "sectors",
+      "paths"
+    ],
+    "paths"
+  ],
+  [
+    "Which of the following is true about an internal hard disk?",
+    [
+      "Often stores the operating system",
+      "Variable amount of storage",
+      "Slow",
+      "Portable"
+    ],
+    "Often stores the operating system"
+  ],
+  [
+    "On a hard disk each track is divided into invisible wedge-shaped sections called _______.",
+    [
+      "bits",
+      "platters",
+      "sectors",
+      "cylinders"
+    ],
+    "sectors"
+  ],
+  [
+    "The hard disk's surface is scratched and some or all of the data is destroyed when there is a _______.",
+    [
+      "track crash",
+      "sector crash",
+      "cylinder crash",
+      "head crash"
+    ],
+    "head crash"
+  ],
+  [
+    "Which of the following is not an example of secondary storage?",
+    [
+      "RAM",
+      "Flash drives",
+      "RAID",
+      "External hard drives"
+    ],
+    "RAM"
+  ],
+  [
+    "An external hard disk _______.",
+    [
+      "usually connects to a USB or Thunderbolt port",
+      "cannot be used in addition to an internal hard disk",
+      "is heavy",
+      "is hard to remove"
+    ],
+    "usually connects to a USB or Thunderbolt port"
+  ],
+  [
+    "Storage that retains its data after the power is turned off is referred to as _______.",
+    [
+      "volatile storage",
+      "sequential storage",
+      "nonvolatile storage",
+      "direct storage"
+    ],
+    "nonvolatile storage"
+  ],
+  [
+    "The process of accessing information from secondary storage devices is referred to as _______.",
+    [
+      "backing up",
+      "reading",
+      "restoring",
+      "writing"
+    ],
+    "reading"
+  ],
+  [
+    "The _______ of a secondary storage device indicates how much data the storage medium can hold.",
+    [
+      "capacity",
+      "access",
+      "storage",
+      "memory"
+    ],
+    "capacity"
+  ],
+  [
+    "Which of the following measures the amount of time required by the storage device to retrieve data and programs?",
+    [
+      "Capacity",
+      "Nonvolatile media",
+      "Access speed",
+      "RAM"
+    ],
+    "Access speed"
+  ],
+  [
+    "One way to improve the storage capacity of a hard disk is to _______.",
+    [
+      "use disk caching",
+      "use file compression",
+      "increase memory",
+      "format often"
+    ],
+    "use file compression"
+  ],
+  [
+    "This process improves system performance by acting as a temporary high-speed holding area between a secondary storage device and the CPU.",
+    [
+      "RAID",
+      "Disk caching",
+      "Data access",
+      "Data compression"
+    ],
+    "Disk caching"
+  ],
+  [
+    "Which of the following characteristics about RAID is incorrect?",
+    [
+      "one high-capacity hard disk drive",
+      "fast access speed",
+      "highly reliable",
+      "expanded storage capability"
+    ],
+    "one high-capacity hard disk drive"
+  ],
+  [
+    "Three ways to improve the performance of a hard disk include _______.",
+    [
+      "RAID, file compression and disk expansion.",
+      "file compression, disk caching, and file encryption.",
+      "disk caching, RAID, and file compression.",
+      "disk caching, RAID, and file expansion."
+    ],
+    "disk caching, RAID, and file compression."
+  ],
+  [
+    "Which of these is not an example of solid state storage?",
+    [
+      "Flash memory cards",
+      "USB drives",
+      "SSDs",
+      "Digital versatile disc"
+    ],
+    "Digital versatile disc"
+  ],
+  [
+    "Smartphones use which of these storage technologies?",
+    [
+      "Flash drive",
+      "Optical drive",
+      "Digital versatile disc",
+      "Flash memory card"
+    ],
+    "Flash memory card"
+  ],
+  [
+    "Optical discs use these to represent data.",
+    [
+      "Laser beams",
+      "Pits and lands",
+      "Magnetic charges",
+      "Analog signals"
+    ],
+    "Pits and lands"
+  ],
+  [
+    "A CD-RW disc _______.",
+    [
+      "cannot be written on",
+      "cannot be erased",
+      "can be erased and rewritten",
+      "can be written to only once"
+    ],
+    "can be erased and rewritten"
+  ],
+  [
+    "All of the following are true of DVD-ROM drives except:",
+    [
+      "DVD-ROM stands for \\"digital versatile disc–read only memory.”",
+      "They can provide over two hours of high-quality video and sound comparable to that found in motion picture theatres.",
+      "They are also known as erasable optical discs.",
+      "They are a type of optical disc."
+    ],
+    "They are also known as erasable optical discs."
+  ],
+  [
+    "The large capacity, high-definition optical discs designed to store hi-def video and video games are _______.",
+    [
+      "HD DVD",
+      "HD CD",
+      "Blu-ray",
+      "DVD-RAM"
+    ],
+    "Blu-ray"
+  ],
+  [
+    "These discs have a capacity of 50 gigabytes on one side.",
+    [
+      "DVD",
+      "HD DVD",
+      "Blu-Ray",
+      "CD"
+    ],
+    "Blu-Ray"
+  ],
+  [
+    "Solid-state storage devices are different than hard disks in that they _______.",
+    [
+      "have slower access speed",
+      "have no moving parts",
+      "have a higher capacity",
+      "are volatile"
+    ],
+    "have slower access speed"
+  ],
+  [
+    "What is it called when servers on the Internet supply applications as a service, rather than a product?",
+    [
+      "Service computing",
+      "Cloud computing",
+      "Optical computing",
+      "Digital versatile computing"
+    ],
+    "Cloud computing"
+  ],
+  [
+    "This allows you to upload and store documents on the Internet.",
+    [
+      "Solid State storage",
+      "Cloud storage",
+      "Hard Disk drive",
+      "Flash drive"
+    ],
+    "Cloud storage"
+  ],
+  [
+    "Which of these is not a mass storage device?",
+    [
+      "RAID system",
+      "File server",
+      "Optical disc",
+      "Organizational cloud storage"
+    ],
+    "Optical disc"
+  ],
+  [
+    "One of the most dramatic changes in connectivity and communications in the past few years has been _______.",
+    [
+      "chat rooms",
+      "satellite uplinks",
+      "widespread use of mobile devices with wireless Internet connectivity",
+      "running programs on remote computers"
+    ],
+    "widespread use of mobile devices with wireless Internet connectivity"
+  ],
+  [
+    "In a communication system, which among the following originate and accept messages in the form of data, information, and/or instructions?",
+    [
+      "Communication channel",
+      "Data transmission specifications",
+      "Connection devices",
+      "Sending and receiving devices"
+    ],
+    "Sending and receiving devices"
+  ],
+  [
+    "In a communication system, which among the following convert messages into packets that can travel across the communication channel?",
+    [
+      "Connection devices",
+      "Storage devices",
+      "Secondary devices",
+      "Sending and receiving devices"
+    ],
+    "Connection devices"
+  ],
+  [
+    "Which physical connection is the fastest?",
+    [
+      "Twisted pair",
+      "Microwave",
+      "Fiber-optic cable",
+      "Coaxial cable"
+    ],
+    "Fiber-optic cable"
+  ],
+  [
+    "Which among the following is considered a line-of-sight communication medium?",
+    [
+      "Microwave",
+      "Broadcast radio",
+      "Bluetooth",
+      "Satellite"
+    ],
+    "Microwave"
+  ],
+  [
+    "WiMax stands for _______.",
+    [
+      "Wide-area Range to Maximize Access",
+      "Worldwide Interoperability for Microwave Access",
+      "Worldwide Access to Maximize Interoperability",
+      "Wide-area Access for Maximum Reach"
+    ],
+    "Worldwide Interoperability for Microwave Access"
+  ],
+  [
+    "Microwave communication uses high-frequency _______.",
+    [
+      "infrared",
+      "radio waves",
+      "optic fibers",
+      "satellite communications"
+    ],
+    "radio waves"
+  ],
+  [
+    "_______ is a term relating to sending data to a satellite.",
+    [
+      "Upload",
+      "Uplink",
+      "Dowload",
+      "Downlink"
+    ],
+    "Uplink"
+  ],
+  [
+    "The GPS device in an automobile uses which communication channel?",
+    [
+      "Microwave",
+      "Satellite",
+      "Radio Frequency (RF)",
+      "Infrared"
+    ],
+    "Satellite"
+  ],
+  [
+    "A service that uses existing phone lines to provide high-speed connections is called _______.",
+    [
+      "Voiceband",
+      "WWAN",
+      "3G/4G",
+      "DSL"
+    ],
+    "DSL"
+  ],
+  [
+    "Cellular services use _______ to provide wireless connectivity to the Internet for smartphones.",
+    [
+      "3G and 4G cellular networks",
+      "T1 and T3 cellular networks",
+      "DSL",
+      "ADSL"
+    ],
+    "3G and 4G cellular networks"
+  ],
+  [
+    "The capacity of a communication channel is measured in _______.",
+    [
+      "band rate",
+      "data flow",
+      "bit capacity",
+      "bandwidth"
+    ],
+    "bandwidth"
+  ],
+  [
+    "Using this type of communications channel, several users can simultaneously use a single connection for high-speed data transfer.",
+    [
+      "Voiceband",
+      "Medium band",
+      "Broadband",
+      "Baseband"
+    ],
+    "Broadband"
+  ],
+  [
+    "Every computer on the Internet has a unique numeric address called a(n) _______.",
+    [
+      "Web address",
+      "domain address",
+      "protocol address",
+      "IP address"
+    ],
+    "IP address"
+  ],
+  [
+    "_______ is the process of breaking down information sent or transmitted across the Internet into small parts.",
+    [
+      "Protocol",
+      "Packetization",
+      "Bandwidth",
+      "Identification"
+    ],
+    "Packetization"
+  ],
+  [
+    "The essential features of this include identifying, sending, and receiving devices and breaking information into small parts for transmission across the Internet.",
+    [
+      "DNS",
+      "TCP/IP",
+      "FTP",
+      "HTTPs"
+    ],
+    "TCP/IP"
+  ],
+  [
+    "The _______ is the central node that coordinates the flow of data by sending messages directly between the sender and receiver nodes.",
+    [
+      "switch",
+      "gateway",
+      "server",
+      "client"
+    ],
+    "switch"
+  ],
+  [
+    "In a computer network, this node that requests and uses resources available from other nodes.",
+    [
+      "Host",
+      "Server",
+      "Client",
+      "Directory server"
+    ],
+    "Client"
+  ],
+  [
+    "This device enables connectivity between two LANS or a LAN and a larger network.",
+    [
+      "Network gateway",
+      "Router",
+      "Node",
+      "Hub"
+    ],
+    "Network gateway"
+  ],
+  [
+    "People that collect and sell personal data are called _______.",
+    [
+      "information resellers",
+      "direct marketers",
+      "fund-raisers",
+      "government agencies"
+    ],
+    "information resellers"
+  ],
+  [
+    "These programs record virtually everything you do on your computer and are used by employers to search employee email and computer files.",
+    [
+      "Spyware",
+      "Employee-monitoring software",
+      "Cookies",
+      "Freeware"
+    ],
+    "Employee-monitoring software"
+  ],
+  [
+    "Small data files that are deposited on a user's hard disk when they visit a website are called _______.",
+    [
+      "cookies",
+      "cache",
+      "codes",
+      "proxies"
+    ],
+    "cookies"
+  ],
+  [
+    "These are used by advertisers to keep track of your web activity as you move from one site to the next.",
+    [
+      "History files",
+      "Third-party cookies",
+      "Web bugs",
+      "First-party cookies"
+    ],
+    "Third-party cookies"
+  ],
+  [
+    "Programs used to secretly record an individual's activities on the Internet are called _______.",
+    [
+      "spyware",
+      "cookies",
+      "keyloggers",
+      "sniffer programs"
+    ],
+    "spyware"
+  ],
+  [
+    "Which type of program would likely be used by investigators to record a potential suspects' Internet activities?",
+    [
+      "Cookie",
+      "Global positioning system",
+      "Web bug",
+      "Keylogger"
+    ],
+    "Keylogger"
+  ],
+  [
+    "This type of computer criminal creates and distributes malicious programs.",
+    [
+      "Keylogger",
+      "Cracker",
+      "Hacker",
+      "Employee"
+    ],
+    "Cracker"
+  ],
+  [
+    "Most browsers offer this, which ensures that your browsing activity is not recorded on your hard disk.",
+    [
+      "Privacy mode",
+      "Browser cache",
+      "Illusion of anonymity",
+      "History files"
+    ],
+    "Privacy mode"
+  ],
+  [
+    "Which of the following is not malware?",
+    [
+      "Viruses",
+      "Ad-Aware",
+      "Worms",
+      "Trojan horses"
+    ],
+    "Ad-Aware"
+  ],
+  [
+    "A program that replicates itself and clogs computers and networks.",
+    [
+      "Worm",
+      "Denial-of-service attack",
+      "Trojan horse",
+      "Virus"
+    ],
+    "Worm"
+  ],
+  [
+    "Free computer games and free screen saver programs are typical carriers of _______.",
+    [
+      "Trojan horses",
+      "viruses",
+      "worms",
+      "DoS"
+    ],
+    "Trojan horses"
+  ],
+  [
+    "Which among the following is a way to shut down an ISP or website?",
+    [
+      "Viruses",
+      "Worms",
+      "Denial of service attack",
+      "Trojan horses"
+    ],
+    "Denial of service attack"
+  ],
+  [
+    "Which among the following is a fraudulent or deceptive act designed to trick individuals on the Internet into spending time or money for little or no return?",
+    [
+      "Internet scam",
+      "Data manipulation",
+      "Theft",
+      "Malicious program"
+    ],
+    "Internet scam"
+  ],
+  [
+    "The use of the Internet, smartphones, or other devices to send or post content intended to hurt or embarrass another person.",
+    [
+      "Identity theft",
+      "Cyberbullying",
+      "Auction fraud",
+      "Snoopware"
+    ],
+    "Cyberbullying"
+  ],
+  [
+    "The most significant concerns for implementation of computer technology involve _______, security, and ethics.",
+    [
+      "accuracy",
+      "property",
+      "privacy",
+      "access"
+    ],
+    "privacy"
+  ],
+  [
+    "Corporations often use this to prevent copyright violations.",
+    [
+      "Website encryption",
+      "Digital Millennium Copyright Act",
+      "Keyloggers",
+      "Digital rights management (DRM)"
+    ],
+    "Digital rights management (DRM)"
+  ],
+  [
+    "This uses software to try thousands of common words sequentially in an attempt to gain unauthorized access to a user’s account.",
+    [
+      "Firewall",
+      "Encryption",
+      "Dictionary attack",
+      "Password"
+    ],
+    "Dictionary attack"
+  ],
+  [
+    "This type of Wi-Fi hotspot operates close to a legitimate Wi-Fi hotspot and steals information such as usernames and passwords.",
+    [
+      "Virus",
+      "Fake",
+      "Rogue",
+      "Worm"
+    ],
+    "Rogue"
+  ],
+  [
+    "The process of coding information to make it unreadable except to those who have a special piece of information known as a key.",
+    [
+      "Protection",
+      "Security",
+      "Encryption",
+      "Restriction"
+    ],
+    "Encryption"
+  ],
+  [
+    "Pricing, promoting, selling, and distributing the organization's goods and services pertains to which of the following functions?",
+    [
+      "Accounting",
+      "Marketing",
+      "Production",
+      "Research"
+    ],
+    "Marketing"
+  ],
+  [
+    "Creating finished goods and services using raw materials and personnel pertains to which of the following functions?",
+    [
+      "Human resources",
+      "Research",
+      "Marketing",
+      "Production"
+    ],
+    "Production"
+  ],
+  [
+    "Who is responsible for operational matters and monitoring day-to-day events?",
+    [
+      "Top management",
+      "Stockholders",
+      "Middle management",
+      "Supervisors"
+    ],
+    "Supervisors"
+  ],
+  [
+    "This level of management is concerned with long-range planning and uses information that will help them plan the future growth and direction of the organization.",
+    [
+      "Middle management",
+      "Supervisors",
+      "Top management",
+      "Stockholders"
+    ],
+    "Top management"
+  ],
+  [
+    "This level of management is involved with tactical planning and implementing the long-term goals within an organization.",
+    [
+      "Supervisors",
+      "Middle management",
+      "Stockholders",
+      "Top management"
+    ],
+    "Middle management"
+  ],
+  [
+    "_____ systems help supervisors by generating databases that act as the foundation for other information systems.",
+    [
+      "Management information",
+      "Transaction processing",
+      "Executive support",
+      "Decision support"
+    ],
+    "Transaction processing"
+  ],
+  [
+    "Which of the following refers to a system that summarizes detailed data from the transaction processing systems in standard reports for middle-level managers?",
+    [
+      "Executive support system (ESS)",
+      "Management information system (MIS)",
+      "Decision support system (DSS)",
+      "Data processing system (DPS)"
+    ],
+    "Management information system (MIS)"
+  ],
+  [
+    "Who uses management information systems?",
+    [
+      "Top-level managers",
+      "Employee-level workers",
+      "Middle-level managers",
+      "Supervisors"
+    ],
+    "Middle-level managers"
+  ],
+  [
+    "Which system presents information in a highly summarized form?",
+    [
+      "Management information system (MIS)",
+      "Transaction processing system (TPS)",
+      "Executive support system (ESS)",
+      "Decision support system (DSS)"
+    ],
+    "Executive support system (ESS)"
+  ],
+  [
+    "A transaction processing system is also referred to as a _______.",
+    [
+      "data processing system",
+      "management information system",
+      "database management",
+      "sales order processing"
+    ],
+    "data processing system"
+  ],
+  [
+    "The _______ activity records the customer requests for products or services.",
+    [
+      "sales order processing",
+      "accounts receivable",
+      "inventory",
+      "payroll"
+    ],
+    "sales order processing"
+  ],
+  [
+    "Money collected from or owed by customers is called _______.",
+    [
+      "accounts payable",
+      "inventory",
+      "sales order processing",
+      "accounts receivable"
+    ],
+    "accounts receivable"
+  ],
+  [
+    "The _______ keeps records of the number of each kind of part or finished good in the warehouse.",
+    [
+      "sales order processing",
+      "payroll",
+      "inventory control system",
+      "general ledger"
+    ],
+    "inventory control system"
+  ],
+  [
+    "What documentation shows the income, expenses and difference between them for a(add space character) company during a specific time period?",
+    [
+      "Purchase order",
+      "Balance sheets",
+      "Accounts payable",
+      "Income statements"
+    ],
+    "Income statements"
+  ],
+  [
+    "This lists the assets, liabilities, and the equity of an organization.",
+    [
+      "Income statement",
+      "Payroll",
+      "Accounts payable",
+      "Balance sheet"
+    ],
+    "Balance sheet"
+  ],
+  [
+    "Regional managers can compare their regular sales reports with that of the other regional managers by using _______.",
+    [
+      "management reports",
+      "periodic reports",
+      "demand reports",
+      "exception reports"
+    ],
+    "periodic reports"
+  ],
+  [
+    "An example of this type of report would be a sales report that shows that certain items are selling significantly above or below forecasts.",
+    [
+      "Exception",
+      "Periodic",
+      "Inventory",
+      "Demand"
+    ],
+    "Exception"
+  ],
+  [
+    "This system is a flexible tool for data analysis, since its reports do not have a fixed format.",
+    [
+      "Management information system",
+      "Transaction processing system",
+      "Executive support system",
+      "Decision support system"
+    ],
+    "Decision support system"
+  ],
+  [
+    "In a GDSS, the _______ is generally the decision maker.",
+    [
+      "group",
+      "technician",
+      "programmer",
+      "client"
+    ],
+    "group"
+  ],
+  [
+    "This typically consists of transactions from the transaction processing system.",
+    [
+      "Decision model",
+      "Internal data",
+      "External data",
+      "System software"
+    ],
+    "Internal data"
+  ],
+  [
+    "This decision model helps middle-level managers control the work of the organization, such as financial planning and sales promotion planning.",
+    [
+      "Tactical model",
+      "Strategic model",
+      "Operational model",
+      "Corporate model"
+    ],
+    "Tactical model"
+  ],
+  [
+    "Some of these systems have the ability to retrieve information from databases outside the company, such as business-news services.",
+    [
+      "Executive support systems (ESS)",
+      "Management information system (MIS)",
+      "Transaction processing system (TPS)",
+      "Decision support system (DSS)"
+    ],
+    "Executive support systems (ESS)"
+  ],
+  [
+    "These systems are used in managing documents, communicating, and scheduling.",
+    [
+      "Transaction processing systems",
+      "Executive support systems",
+      "Office automation systems",
+      "Knowledge work systems"
+    ],
+    "Office automation systems"
+  ],
+  [
+    "Project resources can be scheduled, planned, and controlled using _______.",
+    [
+      "operational managers",
+      "project managers",
+      "CAD/CAM systems",
+      "knowledge work systems"
+    ],
+    "project managers"
+  ],
+  [
+    "Which system is a type of artificial intelligence that uses a database, containing facts and rules, to provide assistance to users?",
+    [
+      "Office automation system",
+      "CAD/CAM system",
+      "Expert system",
+      "Knowledge work system"
+    ],
+    "Expert system"
+  ]
+]`
+        }
+
+
+
+        // Start the quiz when the page loads
+        window.onload = startQuiz;
+    </script>
+</body>
+
+</html>
