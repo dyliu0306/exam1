@@ -19,6 +19,9 @@
 
         }
 
+ 
+
+
         #question-container {
             margin-bottom: 20px;
         }
@@ -98,6 +101,7 @@
 </head>
 
 <body>
+    <div id="countdown"></div>
     <div id="answer-container"></div>
     <div id="question-container"></div>
     <div id="options-container"></div>
@@ -1442,6 +1446,26 @@
             ansContainer.innerHTML = text
 
         }
+        const d = new Date("2024-01-05T13:00:00+08:00").getTime();
+
+        function updateCountdown() {
+            const currentDate = new Date().getTime();
+            const timeDifference = d - currentDate;
+
+            if (timeDifference > 0) {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                const countdownElement = document.getElementById('countdown');
+                countdownElement.innerHTML = `<mark>距離網頁關閉還有 ${days}天 ${hours}時 ${minutes}分 ${seconds}秒</mark><br><br><br>`;
+            }
+        }
+        updateCountdown();
+
+        // 每秒更新一次
+        setInterval(updateCountdown, 1000);
 
 
     </script>
