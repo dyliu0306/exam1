@@ -18,6 +18,7 @@
 
         #options-container {
             display: flex;
+            flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
             margin-bottom: 20px;
@@ -29,7 +30,7 @@
             cursor: pointer;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin: 10px;
+            margin: 5px;
         }
 
 
@@ -108,7 +109,7 @@
                 resultMessage.innerText = '答對了!';
             } else {
                 resultMessage.innerHTML = '<font color="#FF0000">答錯了</font>，正確答案是 ' + questions[currentQuestionIndex][2];
-                nextButton.style.backgroundColor = "#FF0000"; 
+                nextButton.style.backgroundColor = "#FF0000";
             }
 
             if (questions.length > 1) {
