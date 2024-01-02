@@ -151,7 +151,7 @@
             var optionsContainer = document.getElementById('options-container');
             var resultMessage = document.getElementById('result-message');
 
-            questionContainer.innerHTML = "剩餘題數: " + questions.length + "<br><br>" + questions[currentQuestionIndex][0];
+            questionContainer.innerHTML = "<a href='?answer'>點擊查看答案 (當前測驗將遺失)</a><br><br>剩餘題數: " + questions.length + "<br><br>" + questions[currentQuestionIndex][0];
 
             // 創建按鈕時將原始順序的索引添加到按鈕上
             var originalOptions = questions[currentQuestionIndex][1];
@@ -1428,7 +1428,7 @@
             document.getElementById('next-button').style.display = 'none';
             document.getElementById('restart-button').style.display = 'none';
             var ansContainer = document.getElementById('answer-container');
-            var text = ""
+            var text = "<center><a href='?'>返回測驗</a></center><br><br>"
             var x = "<br>"
             var a = ["A. ", "B. ", "C. ", "D. "];
             var ans
