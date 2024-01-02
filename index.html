@@ -68,7 +68,7 @@
     <div id="options-container"></div>
     <div id="result-message"></div>
     <center><button id="next-button" onclick="nextQuestion()">下一題</button></center>
-    <button id="restart-button" onclick="restartQuiz()">重來一次</button>
+    <center><button id="restart-button" onclick="restartQuiz()">重來一次</button></center>
 
 
     <script>
@@ -84,29 +84,6 @@
         function getRandomQuestionIndex() {
             return Math.floor(Math.random() * questions.length);
         }
-        function displayQuestion() {
-            var questionContainer = document.getElementById('question-container');
-            var optionsContainer = document.getElementById('options-container');
-            var resultMessage = document.getElementById('result-message');
-
-            questionContainer.innerHTML = questions[currentQuestionIndex][0];
-
-            // 打亂選項順序
-            var shuffledOptions = shuffleArray(questions[currentQuestionIndex][1]);
-
-            optionsContainer.innerHTML = '';
-            shuffledOptions.forEach(function (option, index) {
-                var optionButton = document.createElement('button');
-                optionButton.className = 'option-button';
-                optionButton.innerText = option;
-                optionButton.onclick = function () { checkAnswer(index); };
-                optionsContainer.appendChild(optionButton);
-            });
-
-            resultMessage.innerText = '';
-            document.getElementById('next-button').style.display = 'none';
-            document.getElementById('restart-button').style.display = 'none';
-        }
 
         // 打亂陣列順序的函數
         function shuffleArray(array) {
@@ -120,14 +97,53 @@
             }
             return shuffledArray;
         }
-        function checkAnswer(selectedIndex) {
+        function displayQuestion() {
+            var questionContainer = document.getElementById('question-container');
+            var optionsContainer = document.getElementById('options-container');
+            var resultMessage = document.getElementById('result-message');
+
+            questionContainer.innerHTML = "剩餘題數: " + questions.length + "<br><br>" + questions[currentQuestionIndex][0];
+
+            // 創建按鈕時將原始順序的索引添加到按鈕上
+            var originalOptions = questions[currentQuestionIndex][1];
+            var buttons = [];
+            for (var i = 0; i < originalOptions.length; i++) {
+                buttons[i] = document.createElement('button');
+                buttons[i].className = 'option-button';
+                buttons[i].innerText = originalOptions[i];
+                buttons[i].setAttribute('data-index', i);
+                buttons[i].onclick = function () { checkAnswer(this); }; // 使用 this 代表當前按鈕元素
+                optionsContainer.appendChild(buttons[i]);
+            }
+
+            // 打亂按鈕順序
+            var shuffledOptions = shuffleArray(buttons);
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(function (button) {
+                optionsContainer.appendChild(button);
+            });
+
+            // 打印正確答案到 console
+            console.log("Correct Answer:", questions[currentQuestionIndex][2]);
+
+            resultMessage.innerText = '';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('restart-button').style.display = 'none';
+        }
+
+
+        // 修改 checkAnswer 函數接受按鈕元素作為參數
+        function checkAnswer(selectedButton) {
             var resultMessage = document.getElementById('result-message');
             var nextButton = document.getElementById('next-button');
+
+            var selectedIndex = parseInt(selectedButton.getAttribute('data-index'), 10);
 
             if (questions[currentQuestionIndex][1][selectedIndex] === questions[currentQuestionIndex][2]) {
                 correctAnswers++;
                 resultMessage.innerText = '答對了!';
                 nextButton.style.backgroundColor = "#27FF27";
+                questions.splice(currentQuestionIndex, 1);
             } else {
                 resultMessage.innerHTML = '<font color="#FF0000">答錯了</font>，正確答案是 ' + questions[currentQuestionIndex][2];
                 nextButton.style.backgroundColor = "#FF0000";
@@ -142,7 +158,6 @@
         }
 
         function nextQuestion() {
-            questions.splice(currentQuestionIndex, 1);
             if (questions.length > 0) {
                 currentQuestionIndex = getRandomQuestionIndex();
                 displayQuestion();
