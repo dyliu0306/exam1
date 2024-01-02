@@ -14,6 +14,11 @@
             margin: 20px;
         }
 
+        #answer-container {
+            text-align: left;
+
+        }
+
         #question-container {
             margin-bottom: 20px;
         }
@@ -77,10 +82,23 @@
             border: none;
             border-radius: 5px;
         }
+
+        .heimu:active,
+        .heimu:hover {
+            color: #fff
+        }
+
+        .heimu {
+            background-color: #252525;
+            color: #252525;
+            text-shadow: none;
+            transition: color 0.3s;
+        }
     </style>
 </head>
 
 <body>
+    <div id="answer-container"></div>
     <div id="question-container"></div>
     <div id="options-container"></div>
     <div id="result-message"></div>
@@ -1352,7 +1370,7 @@
         var currentDate = new Date();
         var targetDate = new Date(currentDate.getFullYear(), 0, 5, 13, 0, 0); // 1/5 13:00 的日期對象
 
-        if ((currentDate > targetDate)|| isDyliuPage) {
+        if ((currentDate > targetDate) || isDyliuPage) {
             document.getElementById('play-button').style.display = 'block';
         }
 
@@ -1380,20 +1398,52 @@
         }
     </script>
     <script>
+        var questions = JSON.parse(exam());
+        var currentQuestionIndex;
+        var correctAnswers = 0;
         // 檢查網址是否包含 "debug"
         var isDyliuPage = window.location.href.includes("debug");
+        var isAnsPage = window.location.href.includes("answer");
 
         var currentDate = new Date();
         var targetDate = new Date(currentDate.getFullYear(), 0, 5, 13, 0, 0); // 1/5 13:00 的日期對象
 
-        if ((currentDate > targetDate)|| isDyliuPage) {
+        if ((currentDate > targetDate) || isDyliuPage) {
             // 超過 1/5 13:00，隱藏相應的元素
+            document.getElementById('answer-container').style.display = 'none';
             document.getElementById('question-container').style.display = 'none';
             document.getElementById('options-container').style.display = 'none';
             document.getElementById('result-message').style.display = 'none';
             document.getElementById('next-button').style.display = 'none';
             document.getElementById('restart-button').style.display = 'none';
         }
+        else if (isAnsPage) {
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('options-container').style.display = 'none';
+            document.getElementById('result-message').style.display = 'none';
+            document.getElementById('next-button').style.display = 'none';
+            document.getElementById('restart-button').style.display = 'none';
+            var ansContainer = document.getElementById('answer-container');
+            var text = ""
+            var x = "<br>"
+            var a = ["A. ", "B. ", "C. ", "D. "];
+            var ans
+            for (var i = 0; i < questions.length; i++) {
+                text += "Q" + parseInt(i + 1) + ": " + questions[i][0] + x + x
+                for (let o = 0; o < 4; o++) {
+                    text += a[o] + questions[i][1][o] + x
+                    if (questions[i][1][o] == questions[i][2]) {
+                        ans = a[o]
+                    }
+
+                }
+                text += "--------------------<br>答案: <span class='heimu'>" + ans + questions[i][2] + "</span>" + x + x + x
+            }
+            ansContainer.innerHTML = text
+
+        }
+
+
     </script>
 </body>
 
