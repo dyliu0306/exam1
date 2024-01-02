@@ -84,17 +84,18 @@
         function getRandomQuestionIndex() {
             return Math.floor(Math.random() * questions.length);
         }
-
         function displayQuestion() {
             var questionContainer = document.getElementById('question-container');
             var optionsContainer = document.getElementById('options-container');
             var resultMessage = document.getElementById('result-message');
-            console.log(questions[currentQuestionIndex][2])
 
             questionContainer.innerHTML = questions[currentQuestionIndex][0];
 
+            // 打亂選項順序
+            var shuffledOptions = shuffleArray(questions[currentQuestionIndex][1]);
+
             optionsContainer.innerHTML = '';
-            questions[currentQuestionIndex][1].forEach(function (option, index) {
+            shuffledOptions.forEach(function (option, index) {
                 var optionButton = document.createElement('button');
                 optionButton.className = 'option-button';
                 optionButton.innerText = option;
@@ -107,6 +108,18 @@
             document.getElementById('restart-button').style.display = 'none';
         }
 
+        // 打亂陣列順序的函數
+        function shuffleArray(array) {
+            var shuffledArray = array.slice(); // 複製陣列以免修改原始陣列
+            for (var i = shuffledArray.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                // 交換元素
+                var temp = shuffledArray[i];
+                shuffledArray[i] = shuffledArray[j];
+                shuffledArray[j] = temp;
+            }
+            return shuffledArray;
+        }
         function checkAnswer(selectedIndex) {
             var resultMessage = document.getElementById('result-message');
             var nextButton = document.getElementById('next-button');
